@@ -17,8 +17,19 @@ def createSpecificMatrix(*pNumbers):
  
 #runs through matrix, removes horizontal duplicates
 def removeHorizontalDuplicates(pMatrix):
-    for x in np.nditer(pMatrix, flags=['external_loop'],order='C'):
-        print(x)
+        vLocalDictionary={}
+        for row in pMatrix:
+                for element in row:
+                        #check if dictionary contains element, if such
+                        if element in vLocalDictionary:
+                                #add index of element to existing entry
+                                print()
+                        else
+                        vLocalDictionary[element] = row.index(element)
+                                #create new entry
+
+
+                 
 
 vTemp = createRandomMatrix(10, 10)
 print(vTemp)
