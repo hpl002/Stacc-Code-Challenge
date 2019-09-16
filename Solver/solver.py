@@ -15,25 +15,26 @@ def createSpecificMatrix(*pNumbers):
 
   
  
-#runs through matrix, removes horizontal duplicates
-def removeHorizontalDuplicates(pMatrix):
-        vLocalDictionary={}
+#decode matrix into formal format
+def decodeMatrix(pMatrix):
+        vMatrixPositions={}
+        vCurrIndexRow = 0
+        vCurrIndexElem = 0
         for row in pMatrix:
+                vCurrIndexRow+=1
                 for element in row:
-                        #check if dictionary contains element, if such
-                        if element in vLocalDictionary:
-                                #add index of element to existing entry
-                                print()
-                        else
-                        vLocalDictionary[element] = row.index(element)
-                                #create new entry
+                        vCurrIndexElem+=1
+                        if element not in vMatrixPositions.keys(): #create new element
+                                vMatrixPositions[element] = 300
+                                
 
+                         
+
+ 
 
                  
 
 vTemp = createRandomMatrix(10, 10)
 print(vTemp)
 
-
-removeHorizontalDuplicates(vTemp)
-
+ 
