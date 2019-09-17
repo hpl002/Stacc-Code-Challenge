@@ -33,13 +33,8 @@ def decodeMatrix(pMatrix):
     vCurrIndexElem = 0
     for row in pMatrix:
         for element in row:
-            if element not in vMatrixPositions.keys():  # create new element
-                vMatrixPositions[element] = [[vCurrIndexElem, vCurrIndexRow]]
-            else:
-                # get array, append new entry to array
-                vMatrixPositions[element].append(
-                    [vCurrIndexElem, vCurrIndexRow])
-            vCurrIndexElem += 1
+                addArrToDictionary(vMatrixPositions, element, [vCurrIndexElem, vCurrIndexRow])
+                vCurrIndexElem += 1
         vCurrIndexElem = 0
         vCurrIndexRow += 1
     return vMatrixPositions
