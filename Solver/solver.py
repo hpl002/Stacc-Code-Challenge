@@ -23,8 +23,9 @@ def addArrToDictionary(pDictionary, pKey, pValue):
                 pDictionary[pKey] = [pValue]
         else:
                 # get array, append new entry to array
-                pDictionary[pKey].append(
-                pValue)
+                if pValue not in pDictionary[pKey]:
+                        pDictionary[pKey].append(
+                        pValue)
 
 # decode matrix into formal format
 def decodeMatrix(pMatrix):
@@ -46,12 +47,35 @@ def markHorizontalDuplicates(pDict):
                 vCurrArr = pDict[i]
                 skip = 0
                 for element in vCurrArr:
-                        yPosition = element[1] 
+                        vAddedCurrentElem = False
                         for e in vCurrArr[skip:]:                                
-                                if yPosition == e[1]:
-                                        addArrToDictionary(gMarkingDict, i, element)
+                                if element[1]  == e[1]:
+                                        if element != e and not vAddedCurrentElem:
+                                                addArrToDictionary(gMarkingDict, i, element)
+                                                addArrToDictionary(gMarkingDict, i, e)
+                                                vAddedCurrentElem = True
+                                        elif element != e:
+                                                addArrToDictionary(gMarkingDict, i, e)
+                        skip+=1
+#When looking for duplicates in the vertical axis we look at the X value
+def markVerticalDuplicated(pDict):
+          for i in range(len(pDict)):
+                vCurrArr = pDict[i]
+                skip = 0
+                for element in vCurrArr:
+                        vAddedCurrentElem = False
+                        for e in vCurrArr[skip:]:      
+                                #X values are not sorted                          
+                                if element[1]  == e[1]:
+                                        if element != e and not vAddedCurrentElem:
+                                                addArrToDictionary(gMarkingDict, i, element)
+                                                addArrToDictionary(gMarkingDict, i, e)
+                                                vAddedCurrentElem = True
+                                        elif element != e:
+                                                addArrToDictionary(gMarkingDict, i, e)
                         skip+=1
 
+ 
 
 
 #[[5, 2], [9, 2], [6, 6], [0, 7], [5, 8], [7, 9]],
