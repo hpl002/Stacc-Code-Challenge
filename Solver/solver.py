@@ -109,7 +109,6 @@ def solver(pDict):
 def Main():
         vMatrix = createRandomMatrix(10, 10)
         vMatrix = createSpecificMatrix('5, 2, 1, 6, 2, 5', '3, 1, 4, 2, 6, 6', '4, 2, 3, 4, 6, 3', '4, 5, 6, 3 ,2, 2', '2, 4, 3, 3, 4, 5', '6, 4, 6, 5, 3, 3')
-        #vMatrix = np.array([[5, 2, 1, 6, 2, 5],[3, 1, 4, 2, 6, 6], [4, 2, 3, 4, 6, 3], [4, 5, 6, 3 ,2, 2], [2, 4, 3, 3, 4, 5], [6, 4, 6, 5, 3, 3]])
         print(vMatrix)
         vDictionary = decodeMatrix(vMatrix)
         markHorizontalDuplicates(vDictionary)
