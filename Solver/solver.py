@@ -1,7 +1,8 @@
 import numpy as np
 import pprint
 
-gMarkingDict = {}
+gMarkingDict_Horizontal = {}
+gMarkingDict_Vertical = {}
 
 # Create random matrix.
 # Specify the size and the range (range is inclusive)
@@ -51,31 +52,40 @@ def markHorizontalDuplicates(pDict):
                         for e in vCurrArr[skip:]:                                
                                 if element[1]  == e[1]:
                                         if element != e and not vAddedCurrentElem:
-                                                addArrToDictionary(gMarkingDict, i, element)
-                                                addArrToDictionary(gMarkingDict, i, e)
+                                                addArrToDictionary(gMarkingDict_Horizontal, i, element)
+                                                addArrToDictionary(gMarkingDict_Horizontal, i, e)
                                                 vAddedCurrentElem = True
                                         elif element != e:
-                                                addArrToDictionary(gMarkingDict, i, e)
-                        skip+=1
-#When looking for duplicates in the vertical axis we look at the X value
-def markVerticalDuplicated(pDict):
-          for i in range(len(pDict)):
-                vCurrArr = pDict[i]
-                skip = 0
-                for element in vCurrArr:
-                        vAddedCurrentElem = False
-                        for e in vCurrArr[skip:]:      
-                                #X values are not sorted                          
-                                if element[1]  == e[1]:
-                                        if element != e and not vAddedCurrentElem:
-                                                addArrToDictionary(gMarkingDict, i, element)
-                                                addArrToDictionary(gMarkingDict, i, e)
-                                                vAddedCurrentElem = True
-                                        elif element != e:
-                                                addArrToDictionary(gMarkingDict, i, e)
+                                                addArrToDictionary(gMarkingDict_Horizontal, i, e)
                         skip+=1
 
+#When looking for duplicates in the vertical axis we look at the X value
+def markVerticalDuplicates(pDict):
+          for i in range(len(pDict)):
+                vCurrArr = pDict[i]
+                for element in vCurrArr:
+                        vAddedCurrentElem = False
+                        for e in vCurrArr:      
+                                #X values are not sorted, thus skipping the checked array does not work                      
+                                if element[0]  == e[0]:
+                                        if element != e and not vAddedCurrentElem:
+                                                addArrToDictionary(gMarkingDict_Vertical, i, element)
+                                                addArrToDictionary(gMarkingDict_Vertical, i, e)
+                                                vAddedCurrentElem = True
+                                        elif element != e:
+                                                addArrToDictionary(gMarkingDict_Vertical, i, e)
+#helper that gets the dictionary key associated with a certain value
+def getKeyWithValue(pDict, value):
+        for i in range(len(pDict)):
+                if(value in pDict[i]):
+                        return i
+                i+=1
  
+def solver(pdict):
+
+
+
+
 
 
 #[[5, 2], [9, 2], [6, 6], [0, 7], [5, 8], [7, 9]],
@@ -162,13 +172,19 @@ vDictionary = {0: [[4, 0],
       [8, 5],
       [8, 6],
       [3, 7]]}
-  
+#MAIN - Insturctions
+# Either create a matrix by passing in numbers or generate one of any size
+# Create the dictionaries that hold the horizontal and vertical duplicates
+# run the solver on the dictioanry created from the matrix. The solver uses the marking dictionaries, it is therefore paramoutn that these are run beforehand 
+
+
 # remove horizontal duplicates
 markHorizontalDuplicates(vDictionary)
+markVerticalDuplicates(vDictionary)
 pprint.pprint(vDictionary)
 print('separator')
-pprint.pprint(gMarkingDict)
-
+pprint.pprint(gMarkingDict_Horizontal)
+print(getKeyWithValue(vDictionary, [5,7]))
 
  
          
