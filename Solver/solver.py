@@ -1,6 +1,7 @@
 import numpy as np
 import pprint
 gMatrixLength = 0
+gMatrixMaxInt = 0
 gMarkingDict_Horizontal = {}
 gMarkingDict_Vertical = {}
 # Create random matrix.
@@ -30,6 +31,7 @@ def addArrToDictionary(pDictionary, pKey, pValue):
 # decode matrix into formal format
 def decodeMatrix(pMatrix):
         global gMatrixLength
+        global gMatrixMaxInt
         gMatrixLength = pMatrix.shape[0]
         vMatrixPositions = {}
         vCurrIndexRow = 0
@@ -37,6 +39,8 @@ def decodeMatrix(pMatrix):
         for row in pMatrix:
                 for element in row:
                         addArrToDictionary(vMatrixPositions, element, [vCurrIndexElem, vCurrIndexRow])
+                        if element > gMatrixMaxInt:
+                                gMatrixMaxInt = element
                         vCurrIndexElem += 1
                 vCurrIndexElem = 0
                 vCurrIndexRow += 1
@@ -45,41 +49,44 @@ def decodeMatrix(pMatrix):
 # goes through each array and checks for duplicates, in effect marking down any duplicates that exist on the same row
 #increases int such that we do not seach unneccesarily
 def markHorizontalDuplicates(pDict):
-          for i in range(len(pDict)):
-                vCurrArr = pDict[i]
-                skip = 0
-                for element in vCurrArr:
-                        vAddedCurrentElem = False
-                        for e in vCurrArr[skip:]:                                
-                                if element[1]  == e[1]:
-                                        if element != e and not vAddedCurrentElem:
-                                                addArrToDictionary(gMarkingDict_Horizontal, i, element)
-                                                addArrToDictionary(gMarkingDict_Horizontal, i, e)
-                                                vAddedCurrentElem = True
-                                        elif element != e:
-                                                addArrToDictionary(gMarkingDict_Horizontal, i, e)
-                        skip+=1
+          for i in range(gMatrixMaxInt+1):
+                if i in pDict:
+                        vCurrArr = pDict[i]
+                        skip = 0
+                        for element in vCurrArr:
+                                vAddedCurrentElem = False
+                                for e in vCurrArr[skip:]:                                
+                                        if element[1]  == e[1]:
+                                                if element != e and not vAddedCurrentElem:
+                                                        addArrToDictionary(gMarkingDict_Horizontal, i, element)
+                                                        addArrToDictionary(gMarkingDict_Horizontal, i, e)
+                                                        vAddedCurrentElem = True
+                                                elif element != e:
+                                                        addArrToDictionary(gMarkingDict_Horizontal, i, e)
+                                skip+=1
 
 #When looking for duplicates in the vertical axis we look at the X value
 def markVerticalDuplicates(pDict):
-          for i in range(len(pDict)):
-                vCurrArr = pDict[i]
-                for element in vCurrArr:
-                        vAddedCurrentElem = False
-                        for e in vCurrArr:      
-                                 if element[0]  == e[0]:
-                                        if element != e and not vAddedCurrentElem:
-                                                addArrToDictionary(gMarkingDict_Vertical, i, element)
-                                                addArrToDictionary(gMarkingDict_Vertical, i, e)
-                                                vAddedCurrentElem = True
-                                        elif element != e:
-                                                addArrToDictionary(gMarkingDict_Vertical, i, e)
+          for i in range(gMatrixMaxInt+1):
+                if i in pDict:
+                        vCurrArr = pDict[i]
+                        for element in vCurrArr:
+                                vAddedCurrentElem = False
+                                for e in vCurrArr:      
+                                        if element[0]  == e[0]:
+                                                if element != e and not vAddedCurrentElem:
+                                                        addArrToDictionary(gMarkingDict_Vertical, i, element)
+                                                        addArrToDictionary(gMarkingDict_Vertical, i, e)
+                                                        vAddedCurrentElem = True
+                                                elif element != e:
+                                                        addArrToDictionary(gMarkingDict_Vertical, i, e)
 #helper that gets the dictionary key associated with a certain value
 def getKeyWithValue(pDict, value):
-        for i in range(len(pDict)):
-                if(value in pDict[i]):
-                        return i
-                i+=1
+        for i in range(gMatrixMaxInt+1):
+                if i in pDict:
+                        if(value in pDict[i]):
+                                return i
+                        i+=1
  
 def solver(pDict):
         vResult = []
