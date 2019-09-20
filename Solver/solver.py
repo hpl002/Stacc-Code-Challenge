@@ -13,10 +13,15 @@ def createRandomMatrix(pSize, pToInt):
 
 
 # create specific matrix
-# content of matrix in format: '1 1 1 1 1 ; 2 2 2 2 2 ; 3 3 3 3 3'
-def createSpecificMatrix(*pNumbers):
-    return np.matrix(*pNumbers)
-    # handle exception
+def createSpecificMatrix(*pArgs):
+        vReturn = []
+        for arg in pArgs:
+                vTemp = []
+                vList = arg.split (",")
+                for e in vList:
+                        vTemp.append(int(e))
+                vReturn.append(vTemp)
+        return np.array(vReturn)
 
 
 def addArrToDictionary(pDictionary, pKey, pValue):
@@ -102,8 +107,9 @@ def solver(pDict):
 # Create the dictionaries that hold the horizontal and vertical duplicates
 # run the solver on the dictioanry created from the matrix. The solver uses the marking dictionaries, it is therefore paramoutn that these are run beforehand 
 def Main():
-        #vMatrix = createRandomMatrix(10, 10)
-        vMatrix = np.array([[5, 2, 1, 6, 2, 5],[3, 1, 4, 2, 6, 6], [4, 2, 3, 4, 6, 3], [4, 5, 6, 3 ,2, 2], [2, 4, 3, 3, 4, 5], [6, 4, 6, 5, 3, 3]])
+        vMatrix = createRandomMatrix(10, 10)
+        vMatrix = createSpecificMatrix('5, 2, 1, 6, 2, 5', '3, 1, 4, 2, 6, 6', '4, 2, 3, 4, 6, 3', '4, 5, 6, 3 ,2, 2', '2, 4, 3, 3, 4, 5', '6, 4, 6, 5, 3, 3')
+        #vMatrix = np.array([[5, 2, 1, 6, 2, 5],[3, 1, 4, 2, 6, 6], [4, 2, 3, 4, 6, 3], [4, 5, 6, 3 ,2, 2], [2, 4, 3, 3, 4, 5], [6, 4, 6, 5, 3, 3]])
         print(vMatrix)
         vDictionary = decodeMatrix(vMatrix)
         markHorizontalDuplicates(vDictionary)
