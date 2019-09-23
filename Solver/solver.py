@@ -94,12 +94,34 @@ def getKeyWithValue(pDict, value):
                         i+=1
  
 def solver(pDict):
-        vResult = []
-        #This var is in essence the length and width of the grid
+        #the string that is going to be outputted
+        vResultString = []
+        #dictionary containing the positions of the entries that are going go be marked, this it used when generating the result string
+        vMarkingDictionary = {}
+        #temporary collections that are used in the actual solving
+        vTempList = []
+        vTempList_Vertical = []
+        #get duplicates from horizontal dictionary
+        for i in range(gMatrixMaxInt+1):
+                 if i in gMarkingDict_Horizontal:
+                        vHorizontal_Duplicates = gMarkingDict_Horizontal[i]
+                        vCurrEntry = vHorizontal_Duplicates.pop() 
+                        #find accompanying entry / entries
+                        for elements in vHorizontal_Duplicates:
+                                #if elements are on the same row
+                                if elements[1] == vCurrEntry[1]:
+                                        vTempList.append(elements)
+                        #Now determening what to do with these entries
+                                #check if there are any horizontal duplicates in any of the elements rows, if there are not, then remove the entry from the list
+
+
+
+
+        #print the result in the requested format
         for y in range(gMatrixLength):
                 for x in range(gMatrixLength):
-                        vResult.append(getKeyWithValue(pDict, [x,y]))
-        return vResult
+                        vResultString.append(getKeyWithValue(pDict, [x,y]))
+        return vResultString
 
 
 #MAIN - Insturctions
