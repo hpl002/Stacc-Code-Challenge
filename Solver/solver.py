@@ -4,6 +4,8 @@ gMatrixLength = 0
 gMatrixMaxInt = 0
 gMarkingDict_Horizontal = {}
 gMarkingDict_Vertical = {}
+#dictionary containing the positions of the entries that are going go be marked, this it used when generating the result string
+gMarkingList = []
 # Create random matrix.
 # Specify the size and the range (range is inclusive)
 
@@ -96,30 +98,28 @@ def getKeyWithValue(pDict, value):
 def solver(pDict):
         #the string that is going to be outputted
         vResultString = []
-        #dictionary containing the positions of the entries that are going go be marked, this it used when generating the result string
-        vMarkingDictionary = {}
         #temporary collections that are used in the actual solving
         vTempList = []
-        vTempListGrouped = []
         #get duplicates from horizontal dictionary
         for i in range(gMatrixMaxInt+1):
                  if i in gMarkingDict_Horizontal:
+                        vTempListGrouped = []
                          #get the  horizontal duplicates
                         vTempList = gMarkingDict_Horizontal[i].copy()
                         #no need to sort horizontal elements as they are inserted in the correct order (not going to sort them in order to be slightly more efficient hehe..)
-                        vCurrElem = vTempList.pop(0)
-                        vHoldingList = []
-                        vHoldingList.@
-                        for j in range(len(vTempList)):
-                                if vCurrElem[0] == vTempList[j][0]:
-                                        print('HAPPY NOW?')
-
-                        for elements in vTempList:
-                                if elements[1] == vCurrElem[1]:
-                                        vHoldingList.append(elements)
-                                vTempListGrouped.append(vHoldingList)
-                                #create list of grouped duplicates
-                                
+                        #TODO - Create a more generic solution that groups n elements depending on their row/ e[1]                         
+                        for j in range(len(vTempList)//2):
+                                k=j*2
+                                vTempListGrouped.append([vTempList[k], vTempList[k+1]])
+                        #chek if there are any columns with duplicates for each of these rows
+                        vVericalDuplicates = gMarkingDict_Vertical[i].copy()
+                        for group in vTempListGrouped:
+                                for elem in group:
+                                        #check if any of the elements share x axis with the vertical duplicates
+                                        for verticalElement in vVericalDuplicates:
+                                                if elem[0] == verticalElement[0]:
+                                                        print()
+                                                        
 
 
 
@@ -128,6 +128,28 @@ def solver(pDict):
                 for x in range(gMatrixLength):
                         vResultString.append(getKeyWithValue(pDict, [x,y]))
         return vResultString
+
+
+def checkPlacement(pElement):
+        vResult = True
+        #check if neighbor has been marked
+        for element in gMarkingList:
+                #check right and left
+                if pElement[0] == (element[0]-1) or (element[0]+1):
+                        vResult = False
+                #check top and bottom
+                if pElement[1] == (element[1]-1) or (element[1]+1):
+                        vResult = False
+                return vResult
+
+
+def checkPrefferentialPlacement(pElement):
+                #check if placement is preferred
+                vPreferredPlacements = [[0,0], [gMatrixLength-1,0], [0, gMatrixLength-1], [gMatrixLength-1, gMatrixLength-1]]
+                if pElement in vPreferredPlacements:
+                        return True
+                else:
+                        return False
 
 # take second element for sort
 def sortByX(elem):
