@@ -100,20 +100,26 @@ def solver(pDict):
         vMarkingDictionary = {}
         #temporary collections that are used in the actual solving
         vTempList = []
-        vTempList_Vertical = []
+        vTempListGrouped = []
         #get duplicates from horizontal dictionary
         for i in range(gMatrixMaxInt+1):
                  if i in gMarkingDict_Horizontal:
-                        vHorizontal_Duplicates = gMarkingDict_Horizontal[i]
-                        vCurrEntry = vHorizontal_Duplicates.pop() 
-                        #find accompanying entry / entries
-                        for elements in vHorizontal_Duplicates:
-                                #if elements are on the same row
-                                if elements[1] == vCurrEntry[1]:
-                                        vTempList.append(elements)
-                        #Now determening what to do with these entries
-                                #check if there are any horizontal duplicates in any of the elements rows, if there are not, then remove the entry from the list
+                         #get the  horizontal duplicates
+                        vTempList = gMarkingDict_Horizontal[i].copy()
+                        #no need to sort horizontal elements as they are inserted in the correct order (not going to sort them in order to be slightly more efficient hehe..)
+                        vCurrElem = vTempList.pop(0)
+                        vHoldingList = []
+                        vHoldingList.@
+                        for j in range(len(vTempList)):
+                                if vCurrElem[0] == vTempList[j][0]:
+                                        print('HAPPY NOW?')
 
+                        for elements in vTempList:
+                                if elements[1] == vCurrElem[1]:
+                                        vHoldingList.append(elements)
+                                vTempListGrouped.append(vHoldingList)
+                                #create list of grouped duplicates
+                                
 
 
 
@@ -123,6 +129,12 @@ def solver(pDict):
                         vResultString.append(getKeyWithValue(pDict, [x,y]))
         return vResultString
 
+# take second element for sort
+def sortByX(elem):
+    return elem[0]
+
+def sortByY(elem):
+        return elem[1]
 
 #MAIN - Insturctions
 # Either create a matrix by passing in numbers or generate one of any size
