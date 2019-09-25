@@ -185,18 +185,15 @@ def checkVerticalDuplicates(pElement, key):
 #cheks if the element has any horizontal or vertial neighbors that have been mared
 #Returns True if it does not breach the rule and the placement is OK
 def checkPlacement(pElement):
+        vPotentialCollisions = []
+        vPotentialCollisions.append(pElement)
+        vPotentialCollisions.append([pElement[0], pElement[1]-1])
+        vPotentialCollisions.append([pElement[0], pElement[1]+1])
+        vPotentialCollisions.append([pElement[0]-1, pElement[1]])
+        vPotentialCollisions.append([pElement[0]+1, pElement[1]])
         vResult = True
         for element in gMarkingList:
-                if pElement[0] == element[0]+1:
-                        vResult = False
-
-                if pElement[0] == element[0]-1:
-                        vResult = False
-
-                if pElement[1] == element[1]+1:
-                        vResult = False
-                
-                if pElement[1] == element[1]-1:
+                if element in vPotentialCollisions:
                         vResult = False
         return vResult
 
