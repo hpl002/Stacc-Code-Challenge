@@ -1,5 +1,6 @@
 import numpy as np
 import pprint
+import random
 from collections import Counter
 gMatrixLength = 0
 gMatrixMaxInt = 0
@@ -126,7 +127,8 @@ def solver(pDict):
                                                 vHoldingList.append(elem)
                                 if len(vHoldingList) > 1:
                                         #get the most frequent element in list
-                                        gMarkingList.append(most_frequent(vHoldingList))
+                                        v = most_frequent(vHoldingList)
+                                        gMarkingList.append(v)
                                 else:
                                         gMarkingList.append(elem)                        
         #print the result in the requested format
@@ -140,22 +142,43 @@ def solver(pDict):
         return vResultString
 
 
-# finds most frequent element in list
+# finds most frequent element in list or return either one based on some random calculation in case of equals
 def most_frequent(List): 
-	occurence_count = Counter(List) 
-	return occurence_count.most_common(1)[0][0] 
+    maxFrequency = 0
+    vContenders = [] 
+    
+    #get element with highest frequency
+    for element in List: 
+        curr_frequency = List.count(element) 
+        if(curr_frequency> maxFrequency): 
+            maxFrequency = curr_frequency 
+            mostFrequentElement = element 
+  
+    #now we have the highest frequency, check if there are any other entries with the same frequency
+    for element in List:
+        curr_frequency = List.count(element)
+        if curr_frequency >= maxFrequency:
+            if element not in vContenders:
+                vContenders.append(element)
+    #if there are several etries with the same frequency, then we just return the first one
+    ramdonIndex = random.randrange(0, len(vContenders)-1)
+    print(ramdonIndex)
+    print(len(vContenders)-1)
+    return vContenders[ramdonIndex]     
+        
 
 
 
 #Checks if the element has any dupicates in the vertical row
 #Returns True if this is the case
 def checkVerticalDuplicates(pElement, key):
-        li = gMarkingDict_Vertical[key]
+        li = gMarkingDict_Vertical[key].copy()
+        li.remove(pElement)
         vResult = False
         for l in li:
                 if pElement[0] == l[0]:
                         vResult = True
-                return vResult
+        return vResult
 
 #cheks if the element has any horizontal or vertial neighbors that have been mared
 #Returns True if it does not breach the rule and the placement is OK
@@ -178,13 +201,6 @@ def checkPrefferentialPlacement(pElement):
                         return True
                 else:
                         return False
-
-# take second element for sort
-def sortByX(elem):
-    return elem[0]
-
-def sortByY(elem):
-        return elem[1]
 
 #MAIN - Insturctions
 # Either create a matrix by passing in numbers or generate one of any size
