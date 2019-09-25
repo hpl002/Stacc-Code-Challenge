@@ -1,5 +1,6 @@
 import numpy as np
 import pprint
+from collections import Counter
 gMatrixLength = 0
 gMatrixMaxInt = 0
 gMarkingDict_Horizontal = {}
@@ -111,40 +112,67 @@ def solver(pDict):
                         for j in range(len(vTempList)//2):
                                 k=j*2
                                 vTempListGrouped.append([vTempList[k], vTempList[k+1]])
-                        #chek if there are any columns with duplicates for each of these rows
-                        vVericalDuplicates = gMarkingDict_Vertical[i].copy()
                         for group in vTempListGrouped:
+                                vHoldingList = []
                                 for elem in group:
+                                        #for each element in the group, we perform 3 tests, for each passed test the element is added to a temporary array, the element witht he largest count is the one which is prioritized
                                         #check if any of the elements share x axis with the vertical duplicates
-                                        for verticalElement in vVericalDuplicates:
-                                                if elem[0] == verticalElement[0]:
-                                                        print()
-                                                        
 
-
-
+                                        if not checkPlacement(elem): #does the element have any neighbors?
+                                                break
+                                        if checkVerticalDuplicates(elem, i): #does the element have any duplicates in y axis
+                                                vHoldingList.append(elem)
+                                        if checkPrefferentialPlacement(elem): #does the element have a prefferencial placement
+                                                vHoldingList.append(elem)
+                                if len(vHoldingList) > 1:
+                                        #get the most frequent element in list
+                                        gMarkingList.append(most_frequent(vHoldingList))
+                                else:
+                                        gMarkingList.append(elem)                        
         #print the result in the requested format
         for y in range(gMatrixLength):
                 for x in range(gMatrixLength):
-                        vResultString.append(getKeyWithValue(pDict, [x,y]))
+                        #check if element is in markingList, if not get key from dictionary
+                        if [x,y] in gMarkingList:
+                                vResultString.append('x')
+                        else:
+                                vResultString.append(getKeyWithValue(pDict, [x,y]))
         return vResultString
 
 
-def checkPlacement(pElement):
-        vResult = True
-        #check if neighbor has been marked
-        for element in gMarkingList:
-                #check right and left
-                if pElement[0] == (element[0]-1) or (element[0]+1):
-                        vResult = False
-                #check top and bottom
-                if pElement[1] == (element[1]-1) or (element[1]+1):
-                        vResult = False
+# finds most frequent element in list
+def most_frequent(List): 
+	occurence_count = Counter(List) 
+	return occurence_count.most_common(1)[0][0] 
+
+
+
+#Checks if the element has any dupicates in the vertical row
+#Returns True if this is the case
+def checkVerticalDuplicates(pElement, key):
+        li = gMarkingDict_Vertical[key]
+        vResult = False
+        for l in li:
+                if pElement[0] == l[0]:
+                        vResult = True
                 return vResult
 
+#cheks if the element has any horizontal or vertial neighbors that have been mared
+#Returns True if it does not breach the rule and the placement is OK
+def checkPlacement(pElement):
+        vResult = True
+        for element in gMarkingList:
+                if pElement[0] == (element[0]-1) or (element[0]+1):
+                        vResult = False
+                if pElement[1] == (element[1]-1) or (element[1]+1):
+                        vResult = False
+        return vResult
 
+
+#checks if the element has a preferred placement, this being one of the corners
+#This is because this reduces the change of blocking in some other non-marked element by the marked elements
+#Returns True if the placement is preferred
 def checkPrefferentialPlacement(pElement):
-                #check if placement is preferred
                 vPreferredPlacements = [[0,0], [gMatrixLength-1,0], [0, gMatrixLength-1], [gMatrixLength-1, gMatrixLength-1]]
                 if pElement in vPreferredPlacements:
                         return True
