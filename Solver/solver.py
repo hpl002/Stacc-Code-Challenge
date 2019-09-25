@@ -129,7 +129,7 @@ def solver(pDict):
                                         #get the most frequent element in list
                                         v = most_frequent(vHoldingList)
                                         gMarkingList.append(v)
-                                else:
+                                elif len(vHoldingList) == 1:
                                         gMarkingList.append(elem)                        
         #print the result in the requested format
         for y in range(gMatrixLength):
@@ -173,8 +173,10 @@ def most_frequent(List):
 #Returns True if this is the case
 def checkVerticalDuplicates(pElement, key):
         li = gMarkingDict_Vertical[key].copy()
-        li.remove(pElement)
         vResult = False
+        #check if there are any entries in the vertical row that is not itself
+        if pElement in li:
+                li.remove(pElement)
         for l in li:
                 if pElement[0] == l[0]:
                         vResult = True
@@ -185,9 +187,16 @@ def checkVerticalDuplicates(pElement, key):
 def checkPlacement(pElement):
         vResult = True
         for element in gMarkingList:
-                if pElement[0] == (element[0]-1) or (element[0]+1):
+                if pElement[0] == element[0]+1:
                         vResult = False
-                if pElement[1] == (element[1]-1) or (element[1]+1):
+
+                if pElement[0] == element[0]-1:
+                        vResult = False
+
+                if pElement[1] == element[1]+1:
+                        vResult = False
+                
+                if pElement[1] == element[1]-1:
                         vResult = False
         return vResult
 
