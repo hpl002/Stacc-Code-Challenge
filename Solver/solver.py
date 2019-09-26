@@ -116,20 +116,21 @@ def solver(pDict):
                         for group in vTempListGrouped:
                                 vHoldingList = []
                                 for elem in group:
+                                        collision = False
                                         #for each element in the group, we perform 3 tests, for each passed test the element is added to a temporary array, the element witht he largest count is the one which is prioritized
                                         #check if any of the elements share x axis with the vertical duplicates
 
                                         if not checkPlacement(elem): #does the element have any neighbors?
-                                                break
+                                                collision = True
                                         if checkVerticalDuplicates(elem, i): #does the element have any duplicates in y axis
                                                 vHoldingList.append(elem)
                                         if checkPrefferentialPlacement(elem): #does the element have a prefferencial placement
                                                 vHoldingList.append(elem)
-                                if len(vHoldingList) > 1:
+                                if len(vHoldingList) > 1 and collision == False:
                                         #get the most frequent element in list
                                         v = most_frequent(vHoldingList)
                                         gMarkingList.append(v)
-                                elif len(vHoldingList) == 1:
+                                elif len(vHoldingList) == 1 and collision == False:
                                         gMarkingList.append(elem)                        
         #print the result in the requested format
         for y in range(gMatrixLength):
@@ -161,10 +162,7 @@ def most_frequent(List):
             if element not in vContenders:
                 vContenders.append(element)
     #if there are several etries with the same frequency, then we just return the first one
-    ramdonIndex = random.randrange(0, len(vContenders)-1)
-    print(ramdonIndex)
-    print(len(vContenders)-1)
-    return vContenders[ramdonIndex]     
+    return vContenders[0]     
         
 
 
